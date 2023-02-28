@@ -1,0 +1,28 @@
+.w-100{
+max-height: 100%;
+}
+.list:hover{
+    background-color:#616161;
+    color: #b2ebf2;
+
+}
+.li{
+    font-size: medium;
+}
+.w-150{
+    width: 250px;
+    z-index: 1;
+}
+.row{
+    color: white;
+    text-decoration: none;
+}
+.active{
+    background-color:#616161;
+}
+.color-dark{
+    color:#b2ebf2;
+}
+.bg-color{
+    background-color: #212121;
+}

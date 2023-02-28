@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* background-image: url('./Assets/Images/Frame\ 1stotrabackground.jpg'); */
+  background-repeat: no-repeat;
+  background-size: 100%;
+
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.color {
+  color: black;
+}
+
+.transback {
+  box-shadow: 0 0 5px 0;
+  background: inherit;
+  backdrop-filter: blur(10px);
+  /* <!--margin: 100px; according to your need--> */
+}
+
+.card-title {
+
+  font-weight: 800;
+}
+
+.round-btn {
+
+  border-radius: 10rem;
+  padding: 5px 8px !important;
+  margin-right: 10px;
+  height: 35px;
+  width: 35px;
+
+}
+
+.primary-col {
+  background-color: #F6821F !important;
+  color: #ffff;
+  border: #F6821F !important;
+}
+
+.primary-col:hover {
+  background-color: #00A650 !important;
+  border: #00A650;
+}
