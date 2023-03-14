@@ -61,16 +61,19 @@ export default function Categories() {
   const [godDays, setGodDays] = useState(utilsdays);
   const [deleteData, setDeleteData] = useState({});
   const [deleteModal, setDeleteModal] = useState({ title: "", isOpen: false });
+  const [catImage, setcatImage] = useState("");
 
   useEffect(() => {
     // callCategoryApi();
     callGetApi();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  console.log("selectedLanguage", selectedLanguage);
   useEffect(() => {
-    callCategoryApi();
-  }, [isLang]);
+    if (selectedLanguage && selectedLanguage.label) {
+      callCategoryApi();
+    }
+  }, [selectedLanguage]);
 
   const callGetApi = async () => {
     const getLanguage = await get(LANGUAGE_ADD_URL);
@@ -179,13 +182,13 @@ export default function Categories() {
         sub_category_name: subcategoryName,
         sub_category_title: subcategoryTitle,
       };
-      console.log("selectedCategory", selectedCategory);
+      // console.log("selectedCategory", selectedCategory);
       const url = SUB_CATEGORY_URL.replace(
         "<SUB_CATEGORY_ID>",
         selectedCategory._id
       );
       const response = await post(url, reqObj);
-      console.log("response", response);
+      // console.log("response", response);
       if (
         response &&
         response.message.toLowerCase().includes("created successfully")
@@ -214,9 +217,10 @@ export default function Categories() {
         categoryTitle,
         lang_id: selectedLanguage.value,
         day: JSON.stringify(days),
+        imageUrl: catImage,
       };
       const response = await post(CATEGORY_URL, reqObj);
-      console.log("resp", response);
+      // console.log("resp", response);
       if (
         response &&
         response.message.toLowerCase().includes("created successfully")
@@ -244,7 +248,7 @@ export default function Categories() {
       response &&
       response.message.toLowerCase().includes("updated successfully")
     ) {
-      console.log("response", response);
+      // console.log("response", response);
       await callCategoryApi();
     }
     setIsDetailsModal({ isOpen: false, data: {}, type: "" });
@@ -292,6 +296,39 @@ export default function Categories() {
     setSelectedCategory({});
     setSubCategory({});
     await callCategoryApi();
+  };
+
+  const onUploadImage = async (e) => {
+    // console.log("file", e.target.files[0]);
+    const response = await getBase64(e.target.files[0]);
+    setcatImage(response);
+    var output = document.getElementById("image");
+    output.src = URL.createObjectURL(e.target.files[0]);
+    output.onload = function () {
+      URL.revokeObjectURL(output.src); // free memory
+    };
+  };
+
+  const getBase64 = (file) => {
+    return new Promise((resolve) => {
+      let fileInfo;
+      let baseURL = "";
+      // Make new FileReader
+      let reader = new FileReader();
+      // Convert the file to base64 text
+      reader.readAsDataURL(file);
+      // on reader load somthing...
+      reader.onload = () => {
+        // Make a fileInfo Object
+        baseURL = reader.result;
+        resolve(baseURL);
+      };
+    });
+  };
+  const onCatModalClose = () => {
+    setcatImage("");
+    setIsAddCategory(false);
+    setGodDays(utilsdays);
   };
   return (
     <>
@@ -351,7 +388,10 @@ export default function Categories() {
         )}
 
         {/* end */}
-        <div>Selected Language : {selectedLanguage.label}</div>
+        <p style={{ fontSize: "1.2rem" }}>
+          Selected Language :
+          <span style={{ fontWeight: "600" }}>{selectedLanguage.label}</span>
+        </p>
         <div>
           <Button onClick={() => setIsLang(true)}>Change Language</Button>
         </div>
@@ -404,7 +444,11 @@ export default function Categories() {
         </CommonModal>
 
         {/* language modal */}
-        <CommonModal show={isLang} title="Select Language">
+        <CommonModal
+          show={isLang}
+          title="Select Language"
+          onHide={() => setIsLang(false)}
+        >
           <Select
             className="basic-single"
             classNamePrefix="select"
@@ -416,21 +460,18 @@ export default function Categories() {
               handleSelect(e);
             }}
           />
-          <Button onClick={() => setIsLang(false)}>Close</Button>
+          <div className="mt-4">
+            <Button onClick={() => setIsLang(false)}>Close</Button>
+          </div>
         </CommonModal>
         {/* end */}
 
         {/* category modal */}
-        <CommonModal show={isAddCategory} title=" Add Category">
-          <div className="row d-flex justify-content-end mx-2">
-            <button
-              type="button"
-              class="btn-close "
-              aria-label="Close"
-              onClick={() => setIsAddCategory(false)}
-            ></button>
-          </div>
-
+        <CommonModal
+          show={isAddCategory}
+          title=" Add Category"
+          onHide={() => onCatModalClose(false)}
+        >
           <div className="container ">
             <div className="row  d-flex justify-conteny">
               <div className="col">
@@ -459,20 +500,7 @@ export default function Categories() {
                   name="categoryTitle"
                 />
               </div>
-              <div className="row  d-flexjustify-content-center">
-                <div className="col ">
-                  <label className="color " for="formGroupExampleInput">
-                    CategoryImage
-                  </label>
-                  <input
-                    onChange={userhandler}
-                    class="form-control m-2"
-                    type="file"
-                    placeholder="CategoryImage"
-                    name="categoryImage"
-                  />
-                </div>
-              </div>
+
               <div className="row  d-flexjustify-content-center">
                 <div className="col ">
                   <label className="color " for="formGroupExampleInput">
@@ -497,6 +525,22 @@ export default function Categories() {
                         );
                       })}
                   </div>
+                </div>
+              </div>
+              <div className="row  d-flexjustify-content-center">
+                <div className="col ">
+                  <label className="color " for="formGroupExampleInput">
+                    CategoryImage
+                  </label>
+                  <input
+                    onChange={onUploadImage}
+                    class="form-control m-2"
+                    type="file"
+                    placeholder="CategoryImage"
+                    name="categoryImage"
+                    accept="image/png, image/gif, image/jpeg"
+                  />
+                  <img id="image" height="150px" width="150px" />
                 </div>
               </div>
             </div>
@@ -533,7 +577,7 @@ export default function Categories() {
                         item={item}
                         buttonClick={cardClickCategory}
                         content={item.categoryTitle}
-                        image="https://i.pinimg.com/originals/ca/18/d2/ca18d2475812b56fb79394d06a4f00c4.jpg"
+                        image={item.imageUrl}
                         details={item}
                         onEdit={onEditCategory}
                         onDelete={(data) => onClickDelete("cat", data)}
@@ -585,6 +629,7 @@ export default function Categories() {
                 >
                   Add details
                 </Button>
+
                 {detailsData && detailsData.length ? (
                   <>
                     <button
@@ -614,19 +659,15 @@ export default function Categories() {
                 ) : null}
               </>
             ) : null}
-            {detailsData &&
-              detailsData.map((item) => {
-                return <p>{item}</p>;
-              })}
+            <div className="innerFlexItem">
+              {detailsData &&
+                detailsData.map((item) => {
+                  return <p>{item}</p>;
+                })}
+            </div>
           </div>
         </div>
       </Layout>
     </>
   );
 }
-
-const dummy = {
-  categoryTitle: "Shiva",
-  categoryName: "Shiva",
-  day: '["Monday","Thursday","Sunday"]',
-};

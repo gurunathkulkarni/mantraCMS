@@ -37,16 +37,21 @@ export default function cardComponent(props) {
         {title && <Card.Title>{title}</Card.Title>}
         {content && (
           <div className="subDiv" style={{ display: isCategory && "flex" }}>
-            {image && (
-              <Card.Img variant="top" src={image} style={{ width: "30%" }} />
-            )}
+            {/* {image && ( */}
+            <Card.Img
+              variant="top"
+              src={image}
+              style={{ width: "150px", height: "150px" }}
+              alt="No Image added"
+            />
+            {/* )} */}
 
             {!isCategory ? (
               <div
                 style={{ justifyContent: "space-between" }}
                 className="d-flex"
               >
-                <div>
+                <div style={{ width: "70%" }}>
                   <Card.Text
                     style={{
                       marginLeft: "20px",

@@ -8,6 +8,7 @@ export default function EditCategory({ show, onHide, data, langId, onUpdate }) {
   const [categoryName, setCategoryName] = useState();
   const [categoryTitle, setCategoryTitle] = useState();
   const [godDays, setGodDays] = useState(utilsdays);
+  const [catImage, setcatImage] = useState("");
 
   const userhandler = (e) => {
     const { name, value } = e.target;
@@ -37,7 +38,7 @@ export default function EditCategory({ show, onHide, data, langId, onUpdate }) {
     }
   }, [data]);
 
-  console.log("DATAAA", data);
+  // console.log("DATAAA", data);
   // days selection
   const onDaysSelect = (index) => {
     const array = [...godDays];
@@ -60,10 +61,11 @@ export default function EditCategory({ show, onHide, data, langId, onUpdate }) {
         categoryTitle,
         // lang_id: langId,
         day: JSON.stringify(days),
+        imageUrl: catImage,
       };
       const URL = `${CATEGORY_URL}/${data._id}`;
       const response = await put(URL, reqObj);
-      console.log("resp", response);
+      // console.log("resp", response);
       if (
         response &&
         response.message.toLowerCase().includes("updated successfully")
@@ -77,6 +79,32 @@ export default function EditCategory({ show, onHide, data, langId, onUpdate }) {
     }
   };
 
+  const onUploadImage = async (e) => {
+    const response = await getBase64(e.target.files[0]);
+    setcatImage(response);
+    var output = document.getElementById("image-change");
+    output.src = URL.createObjectURL(e.target.files[0]);
+    output.onload = function () {
+      URL.revokeObjectURL(output.src); // free memory
+    };
+  };
+
+  const getBase64 = (file) => {
+    return new Promise((resolve) => {
+      let fileInfo;
+      let baseURL = "";
+      // Make new FileReader
+      let reader = new FileReader();
+      // Convert the file to base64 text
+      reader.readAsDataURL(file);
+      // on reader load somthing...
+      reader.onload = () => {
+        // Make a fileInfo Object
+        baseURL = reader.result;
+        resolve(baseURL);
+      };
+    });
+  };
   return (
     <CommonModal show={show} title="Edit Category" onHide={onHide}>
       <div className="container ">
@@ -109,20 +137,7 @@ export default function EditCategory({ show, onHide, data, langId, onUpdate }) {
               value={categoryTitle}
             />
           </div>
-          {/* <div className="row  d-flexjustify-content-center">
-            <div className="col ">
-              <label className="color " for="formGroupExampleInput">
-                CategoryImage
-              </label>
-              <input
-                onChange={userhandler}
-                class="form-control m-2"
-                type="file"
-                placeholder="CategoryImage"
-                name="categoryImage"
-              />
-            </div>
-          </div> */}
+
           <div className="row  d-flexjustify-content-center">
             <div className="col ">
               <label className="color " for="formGroupExampleInput">
@@ -146,7 +161,27 @@ export default function EditCategory({ show, onHide, data, langId, onUpdate }) {
               </div>
             </div>
           </div>
+          <div className="row  d-flexjustify-content-center">
+            <div className="col ">
+              <label className="color " for="formGroupExampleInput">
+                CategoryImage
+              </label>
+              <input
+                onChange={onUploadImage}
+                class="form-control m-2"
+                type="file"
+                placeholder="CategoryImage"
+                name="categoryImage"
+              />
+            </div>
+          </div>
         </div>
+        <img
+          src={data.imageUrl}
+          id="image-change"
+          height="150px"
+          width="150px"
+        />
         <div className="row justify-content-center mt-4 btnmargin">
           <div className="col-1 justify-conteny-center">
             <button

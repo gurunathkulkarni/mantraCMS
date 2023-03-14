@@ -14,7 +14,7 @@ const EdittSubCat = ({ show, onHide, data, langId, onUpdate, categoryId }) => {
       setsubcategoryTitle(value);
     }
   };
-  console.log("subdata", data);
+  // console.log("subdata", data);
 
   useEffect(() => {
     setSubCategoryName(data.sub_category_name);

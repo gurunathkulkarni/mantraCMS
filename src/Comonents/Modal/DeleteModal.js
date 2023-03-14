@@ -4,7 +4,7 @@ import { BASE_URL } from "../utils/apiConstant";
 import { deleteMethod, put } from "../utils/apiMethods";
 
 const DeleteModal = ({ show, onHide, title, data, onDone, categoryId }) => {
-  console.log("DELETE", data);
+  // console.log("DELETE", data);
   const onDelete = async () => {
     let url = "";
     if (title === "Category") {
