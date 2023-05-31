@@ -31,6 +31,12 @@ class StrotraInsert extends Component {
     array[index] = value;
     this.setState({ formValue: array });
   };
+
+  onAddSinlgePara = () => {
+    const array = [...this.state.formValue];
+    array.push("");
+    this.setState({ formValue: array });
+  };
   render() {
     const { show, onHide, children, onSubmit, title, size, type, data } =
       this.props;
@@ -79,6 +85,16 @@ class StrotraInsert extends Component {
                 </div>
               </>
             ))}
+            {formValue && formValue.length > 1 && (
+              <div style={{ float: "right", margin: "10px" }}>
+                <button
+                  onClick={this.onAddSinlgePara}
+                  className="btn btn-primary"
+                >
+                  Add +1
+                </button>
+              </div>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>

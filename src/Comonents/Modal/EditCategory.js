@@ -80,6 +80,7 @@ export default function EditCategory({ show, onHide, data, langId, onUpdate }) {
   };
 
   const onUploadImage = async (e) => {
+    console.log("file", e.target.files[0]);
     const response = await getBase64(e.target.files[0]);
     setcatImage(response);
     var output = document.getElementById("image-change");

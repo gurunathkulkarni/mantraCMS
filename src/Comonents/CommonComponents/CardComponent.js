@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
-export default function cardComponent(props) {
+export default function CardComponent(props) {
   const {
     item,
     image,
@@ -21,6 +21,16 @@ export default function cardComponent(props) {
   if (isCategory) {
     days = JSON.parse(details.day);
   }
+
+  // useEffect(() => {
+  //   console.log("CARD NAME", content);
+  //   if (content === "shivaexample" && image && image.data) {
+  //     const base64String = btoa(
+  //       String.fromCharCode(...new Uint8Array(image.data))
+  //     );
+  //     console.log("CONVERTED", base64String);
+  //   }
+  // }, []);
 
   return (
     <Card

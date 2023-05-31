@@ -68,7 +68,7 @@ export default function Categories() {
     callGetApi();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log("selectedLanguage", selectedLanguage);
+
   useEffect(() => {
     if (selectedLanguage && selectedLanguage.label) {
       callCategoryApi();
@@ -299,7 +299,7 @@ export default function Categories() {
   };
 
   const onUploadImage = async (e) => {
-    // console.log("file", e.target.files[0]);
+    // console.log("file", e.target);
     const response = await getBase64(e.target.files[0]);
     setcatImage(response);
     var output = document.getElementById("image");
